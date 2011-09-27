@@ -336,26 +336,3 @@
 		}
 
 	}
-
-////////////////////////////////////////////////////////////////////////////////
-
-	$rsa = RSA::getInstance();
-	// Generate a keypair from two random prime numbers.
-	$keypair = $rsa->generate('235897301', '235898237');
-
-	// For testing purposes, we are going to define a dummy entities keypair here.
-	// Key ( Public, Private, Modulus ).
-	$theirs = $rsa->key('11', false, '55646646815960129');
-
-	// Load both keypairs into the library.
-	$rsa->load($keypair, $theirs);
-
-	echo "\n";
-	echo "Our keypair:\n";
-	var_dump($keypair);
-	echo "Their keypair:\n";
-	var_dump($theirs);
-	echo "\n";
-	$message = "Hi THEM!\nI like pizza. Pizza is yummy. Hurray for pizza!\nZander.";
-	$coded = $rsa->encrypt($message);
-	var_dump($rsa->sign($coded));
