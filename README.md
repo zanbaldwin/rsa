@@ -5,8 +5,8 @@ Cryptography is really beginning to intrigue me, so this library will be my impl
 
 The keys generated from this library are _integers_.
 
-Example: Sending
-----------------
+Example: Keypairs
+-----------------
 
 First of all, you need to generate a keypair:
 
@@ -32,6 +32,9 @@ Next we need to load our keypair, and the entity (to be referred to as "their" k
 	$their = $rsa->key('11', false, '55646646815960129');
 	$rsa->load($ours, $theirs);
 
+Example: Sending
+----------------
+
 Now, we want to encrypt a message, with their public key, so that only they can read it.
 
 	$message = "Hi THEM!\nI like pizza. Pizza is yummy. Hurray for pizza!\nZander.";
@@ -50,7 +53,33 @@ Now, I although this works completely, I don't know the industry standard on whe
 
 Send both of these values to the external entity and they can, with their private key, and our public key, verify the signature and decrypt the message.
 
+Example: Receiving
+------------------
+
+Okay. Now, using the same keypairs for ourselves and the "external entity". Except this time we have received the following data:
+
+	$message:
+	string(466) "12155966171842900 26118154798396694 14250279235288236 50610241651959471 21808883696030938 54423392094670248 9870925205268418 8739790981591918 47084251473475750 32278194315425703 3692519925827522 40785317999691389 47296259483576909 44434771484384908 12379886597107548 12206526790309673 49401166903442937 7282538360766037 47397459272021711 22050690086818991 12396100921598324 1214479131795388 1525359502895831 4819051131036891 12632728583926439 36099544846488291 97336"
+	$signature
+	string(192) "25532648015616690 15241520630239213 15193110137771952 31283776609007542 22357473601781567 43396255023594588 35730975624270977 29817040025643614 1099355056013519 8312448325796817 16885582886375"
+
+First, before we decrypt and open the message, we want to make sure it has been sent from THEM, and not someone else.
+
+	$from_THEM = $rsa->prove($message, $signiture);
+	// The value of $from_THEM is:
+	bool(true)
+
+Now we now it is from a trusted source, we can decrypt it.
+
+	$original = $rsa->decrypt($message)
+	// The value of $original is:
+	string(79) "Hi Zander!\nI like pizza, too. Pizza is agreeably yummy. Hurray for pizza!\nTHEM."
+
+There you have it! I will try to improve this. It's extremely basic, but up next is the [AES][5] algorthm and [DSA][6] for SSH keypairs :)
+
 [1]: http://en.wikipedia.org/wiki/Secure_Shell "SSH: Secure Shell"
 [2]: http://en.wikipedia.org/wiki/RSA "RSA Algorithm on WikiPedia"
 [3]: http://php.net/ "PHP: Hypertext Preprocessor"
 [4]: https://github.com/ "GitHub"
+[5]: http://en.wikipedia.org/wiki/Advanced_Encryption_Standard "Advanced Encryption Standard on WikiPedia"
+[6]: http://en.wikipedia.org/wiki/Digital_Signature_Algorithm "Digitial Signature Algorithm on WikiPedia"
