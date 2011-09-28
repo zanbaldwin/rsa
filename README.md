@@ -8,7 +8,8 @@ The keys generated from this library are _integers_.
 Example: Keypairs
 -----------------
 
-First of all, you need to generate a keypair:
+First of all, you need to generate a keypair, by providing the `generate()` method with two large prime numbers.
+A file with some sample prime numbers has been included in this repository.
 
 	$rsa = RSA::getInstance();
 	$keypair = $rsa->generate('235897301', '235898237');
